@@ -1,16 +1,21 @@
-package bubble.test.ex03;
+package bubble.test.ex04;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // class Player -> new 가능한 애들!! 게임에 존재할 수 있음. (추상메서드를 가질 수 없다.)
 // 추상메서드를 implements 하면 Moveable이 가지고 있는 추상메서드를 구현해야 한다. 
+@Getter
+@Setter
 public class Player extends JLabel implements Moveable {
 
 	// 위치 상태
 	private int x;
 	private int y;
-	
+
 	// 움직임 상태
 	private boolean left;
 	private boolean right;
@@ -31,9 +36,9 @@ public class Player extends JLabel implements Moveable {
 
 	private void initSetting() {
 		// 좌표
-		x = 55; 
+		x = 55;
 		y = 535;
-		
+
 		left = false;
 		right = false;
 		up = false;
@@ -47,16 +52,38 @@ public class Player extends JLabel implements Moveable {
 	// 이벤드 핸들러
 	@Override
 	public void left() {
-		setIcon(playerL);
-		x = x-10;
-		setLocation(x, y);
+		System.out.println("left 스레드 생성");
+		left = true;
+		new Thread(() -> {
+			while (left) {
+				setIcon(playerL);
+				x = x - 1;
+				setLocation(x, y);
+				try {
+					Thread.sleep(10); // 0.01초
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} 
+			}
+		}).start();
 	}
 
 	@Override
 	public void right() {
-		setIcon(playerR);
-		x = x+10;
-		setLocation(x, y);
+		System.out.println("right");
+		right = true;
+		new Thread(() -> {
+			while (right) {
+				setIcon(playerR);
+				x = x + 1;
+				setLocation(x, y);
+				try {
+					Thread.sleep(10); // 0.01초
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} 
+			}
+		}).start();
 	}
 
 	@Override
