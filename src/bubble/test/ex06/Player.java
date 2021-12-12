@@ -1,4 +1,4 @@
-package bubble.test.ex05;
+package bubble.test.ex06;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -31,6 +31,7 @@ public class Player extends JLabel implements Moveable {
 	public Player() {
 		initObject();
 		initSetting();
+		initBackgroundPlayerService();
 	}
 
 	private void initObject() {
@@ -40,7 +41,7 @@ public class Player extends JLabel implements Moveable {
 
 	private void initSetting() {
 		// 좌표
-		x = 55;
+		x = 80;
 		y = 535;
 
 		left = false;
@@ -53,6 +54,10 @@ public class Player extends JLabel implements Moveable {
 		setLocation(x, y);
 	}
 
+	public void initBackgroundPlayerService() {
+		new Thread(new BackgroundPlayerService(this)).start();
+	}
+	
 	// 이벤드 핸들러
 	@Override
 	public void left() {
